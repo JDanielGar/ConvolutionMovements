@@ -1,5 +1,7 @@
-# 05 de Junio del 2018
+# 05 de Junio del 2018 <- Se implementa en modulo interno
+# Funcion para salvar imagenes ( Tutorial conv )
 
+# 01 de Junio del 2018
 # 31 Mayo 2018
 
 import numpy as np
@@ -26,7 +28,7 @@ class Recurrent_Photo:
         self.camera.release()
         self.resize = resize
 
-    def get_recurrence(self, alpha=(0.75555, 0.25555)):
+    def get_recurrence(self, alpha=(0.55, 0.45)):
         '''
         Alpha are 2 float numbers represented by the amount of 
         superposition that you want to have in te current image.
@@ -53,12 +55,14 @@ class Recurrent_Photo:
         '''
         return np.abs(A - B)
 
-def resize_images(X, dimensions=(100, 75)):
+def resize_images(X, dimensions=(100, 100)):
     if len(X.shape) == 3:
         X = cv2.resize(X, dimensions)
-    else:    
-        for image in X:
-            image = cv2.resize(image, dimensions)
+    else:
+        resized_images = np.zeros([len(X), dimensions[0], dimensions[1], 3])
+        for image in range(len(X)):
+            resized_images[image] = cv2.resize(X[image], dimensions)
+        X = resized_images
     return X
 
 def show_image(X):
@@ -69,20 +73,4 @@ def show_image(X):
             cv2.imshow('X', image)
             cv2.waitKey(1)
             sleep(0.05)
-
-non_movement = Recurrent_Photo(50)
-
-print('Prepare next movement...')
-sleep(2)
-
-movement = Recurrent_Photo(50)
-
-non_movement_recurrence = non_movement.get_recurrence()
-movement_recurrence = movement.get_recurrence()
-
-X = resize_images(non_movement_recurrence)
-Y = resize_images(movement_recurrence)
-
-
-
 

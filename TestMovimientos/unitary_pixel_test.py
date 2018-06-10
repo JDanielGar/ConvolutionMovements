@@ -7,6 +7,8 @@ camera = cv2.VideoCapture(0)
 previous_photos = 0
 X = []
 N = []
+m = []
+dx = []
 for vc in range(100):
     _, photo = camera.read()
     cv2.imshow('Image', photo)
@@ -17,14 +19,23 @@ for vc in range(100):
     # Add X to plot
     X.append(point)
 
+    # Derivative
+    if vc > 0:
+        dx.append(X[-1]-X[-2])
     # Normalization
-    N.append(np.sum(X)/len(X))
-    m = 10
+    # norm = np.sum(X)/len(X)
+    # N.append(norm)
+    # if vc > 0:
+    #     m.append(np.abs(norm - N[-2]))
     
     # Printing Data
     print(photo[0, 0, 0])
     cv2.waitKey(1)
-plt.plot(range(100), comportament)
+plt.plot(range(100), X)
 plt.show()
-plt.plot(range(100), normalization)
+plt.plot(range(99), dx)
 plt.show()
+# plt.plot(range(100), N)
+# plt.show()
+# plt.plot(range(99), m)
+# plt.show()

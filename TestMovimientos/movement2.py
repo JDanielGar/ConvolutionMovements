@@ -65,7 +65,7 @@ class Momentum():
                     image[image[:, :] >= self.humbral] = 0 # Delete all points without minimum changes
                     alfa_sequence = image + alfa_sequence/1.5
                     self.momentum[dimension, frame] = alfa_sequence
-                    cv2.imshow('frame',alfa_sequence)
+                    cv2.imshow('frame', alfa_sequence)
                     cv2.waitKey(1)
             print('Dimension', self.tags[dimension], ' completed.')
             sleep(3)
@@ -82,13 +82,13 @@ class Momentum():
     def generate_training_set(self):
         for dimension in range(len(self.momentum)):
             for photo in range(self.capacity):
-                plt.imwrite('./Data/{0}/{1}.png'.format(dimension, photo), self.momentum[dimension, photo]*255)   
+                cv2.imwrite('./Data/{0}/{1}.png'.format(dimension, photo), self.momentum[dimension, photo]*255)   
         print('Operation Complete')             
 
 
 
         
-memory = Momentum(2, 50)
+memory = Momentum(2, 100)
 memory.show_image(0, 5)
 memory.generate_training_set()
 
@@ -98,7 +98,7 @@ memory.generate_training_set()
 # classifier = memory.classifier
 
 # train_datagen = ImageDataGenerator(
-#         rescale=1./255,
+#         rescale=1,
 #         shear_range=0.2,
 #         zoom_range=0.2,
 #         horizontal_flip=True)

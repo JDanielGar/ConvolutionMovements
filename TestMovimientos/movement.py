@@ -39,13 +39,15 @@ class Momentum():
                     self.last_sequence.append(image)
                     cv2.putText(image,str(frame),(10,500), font, 4,(255,255,255),2,cv2.LINE_AA)
                     cv2.imshow('frame',image)
+                    cv2.imwrite('{0}/{1}.jpg'.format(dimension, frame), image)
                 else:
                     mean = abs(image - self.last_sequence[-1])
-                    self.last_sequence.append(image)
                     image[mean[:, :] >= self.humbral] = 0 
+                    self.last_sequence.append(image)
                     cv2.putText(image,str(frame),(10,500), font, 4,(255,255,255),2,cv2.LINE_AA)
                     cv2.imshow('frame',image)
                     cv2.waitKey(1)
+                    cv2.imwrite('{0}/{1}.jpg'.format(dimension, frame), image)
             print('Dimension', self.tags[dimension], ' completed.')
         self.capture.release()
         cv2.destroyAllWindows()
