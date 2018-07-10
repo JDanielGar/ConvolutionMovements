@@ -20,15 +20,16 @@ import numpy as np
 
 ''' Take the data from enviroment '''
 
-left = Recurrent_Photo(20, times=3).recurrence_image
-right = Recurrent_Photo(20, times=3).recurrence_image
+left = Recurrent_Photo(20, times=4).recurrence_image 
+print('XXXX')
+right = Recurrent_Photo(20, times=4).recurrence_image
 
 ''' Prepare the data to train '''
 
-A = resize_images(left, (100, 100))
+A = resize_images(left[6:], (100, 100))
 A_labels = np.zeros(A.shape[0])
 
-B = resize_images(right, (100, 100))
+B = resize_images(right[6:], (100, 100))
 B_labels = np.ones(B.shape[0])
 
 X_train = np.concatenate((A, B), axis=0)
@@ -59,22 +60,27 @@ def get_classifier():
 ''' Compiling classificator '''
     
 classifier = get_classifier()
-classifier.load_weights('./movement_weights')
+classifier.load_weights('./weights')
 
-for images in X_train:
-   print(classifier.predict(np.array([images])))
+X_test = []
+Y_test = []
+for position in range(len(X_train)):
+    if classifier.predict(np.array([X_train[position]])) > 0.7:
+       X_test.append(X_train[position])
+       Y_test.append(Y_train[position])
+
 
 new_classifier = get_classifier()
 
 batch_size = 32 
-num_epochs = 10 
+num_epochs = 1 
 
-classifier.compile(loss='binary_crossentropy', 
+new_classifier.compile(loss='binary_crossentropy', 
               optimizer='adam',
               metrics=['accuracy'])
 
-classifier.fit(X_train, Y_train,              
+new_classifier.fit(X_train, Y_train,              
           batch_size=batch_size, epochs=num_epochs,
           verbose=1, validation_split=0.1)
 
-real_time_classification(10, classifier)
+# real_time_classification(10, classifier)

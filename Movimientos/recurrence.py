@@ -40,7 +40,7 @@ class Recurrent_Photo():
                 alfa_sequence = image + alfa_sequence/1.5
 
                 # Result into a numpy array
-                self.recurrence_image[frame] = alfa_sequence
+                self.recurrence_image[frame+time*capacity] = alfa_sequence # BUGFIX
 
                 # Normal CV2 Process
                 cv2.imshow('Image', alfa_sequence)
